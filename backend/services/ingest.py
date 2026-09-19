@@ -2,8 +2,10 @@ from pathlib import Path
 import pickle
 
 import faiss
+import numpy as np
 from pypdf import PdfReader
-from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import normalize
 
 
 DATA_DIR = Path("data")
@@ -14,7 +16,6 @@ VECTORSTORE_DIR.mkdir(exist_ok=True)
 
 def load_pdf_text(pdf_path: Path) -> str:
     reader = PdfReader(str(pdf_path))
-
     text = ""
 
     for page in reader.pages:
@@ -28,7 +29,6 @@ def load_pdf_text(pdf_path: Path) -> str:
 
 def split_text(text: str, chunk_size: int = 800, overlap: int = 100):
     chunks = []
-
     start = 0
 
     while start < len(text):
@@ -64,16 +64,17 @@ def main():
 
     print(f"Total chunks created: {len(all_chunks)}")
 
-    print("Loading embedding model...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-
     texts = [chunk["text"] for chunk in all_chunks]
 
-    embeddings = model.encode(
-        texts,
-        show_progress_bar=True,
-        normalize_embeddings=True,
+    print("Creating TF-IDF embeddings...")
+
+    vectorizer = TfidfVectorizer(
+        max_features=10000,
+        stop_words="english"
     )
+
+    embeddings = vectorizer.fit_transform(texts)
+    embeddings = normalize(embeddings).toarray().astype("float32")
 
     dimension = embeddings.shape[1]
 
@@ -82,13 +83,16 @@ def main():
 
     faiss.write_index(
         index,
-        str(VECTORSTORE_DIR / "ip_sakti.index"),
+        str(VECTORSTORE_DIR / "ip_sakti.index")
     )
 
     with open(VECTORSTORE_DIR / "metadata.pkl", "wb") as file:
         pickle.dump(all_chunks, file)
 
-    print("Vector database created successfully!")
+    with open(VECTORSTORE_DIR / "vectorizer.pkl", "wb") as file:
+        pickle.dump(vectorizer, file)
+
+    print("TF-IDF vector database created successfully!")
 
 
 if __name__ == "__main__":
