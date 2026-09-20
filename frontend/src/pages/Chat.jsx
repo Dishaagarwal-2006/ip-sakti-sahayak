@@ -52,30 +52,35 @@ function Chat() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: trimmedQuestion,
-        }),
-      });
+      const response = await fetch(
+        "https://ip-sakti-sahayak-za5c.onrender.com/ask",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question: trimmedQuestion,
+          }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to get a response from the backend.");
+        throw new Error(
+          `Backend returned status ${response.status}`
+        );
       }
 
       const data = await response.json();
 
       const assistantMessage = {
-  id: Date.now() + 1,
-  role: "assistant",
-  content:
-    data.answer ||
-    "I could not generate an answer from the available documents.",
-  sources: data.results || [],
-};
+        id: Date.now() + 1,
+        role: "assistant",
+        content:
+          data.answer ||
+          "I could not generate an answer from the available documents.",
+        sources: data.results || [],
+      };
 
       setMessages((previousMessages) => [
         ...previousMessages,
@@ -239,50 +244,50 @@ function Chat() {
                   </div>
 
                   {message.role === "assistant" ? (
-  <div className="markdown-content max-w-none text-sm">
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-      {message.content}
-    </ReactMarkdown>
-  </div>
-) : (
-  <p className="whitespace-pre-wrap text-sm leading-6">
-    {message.content}
-  </p>
-)}
+                    <div className="markdown-content max-w-none text-sm">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="whitespace-pre-wrap text-sm leading-6">
+                      {message.content}
+                    </p>
+                  )}
 
                   {message.sources?.length > 0 && (
-  <div className="mt-4 border-t border-white/10 pt-3">
-    <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-300">
-      <CheckCircle2 size={15} />
-      Sources from the knowledge base
-    </div>
+                    <div className="mt-4 border-t border-white/10 pt-3">
+                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-300">
+                        <CheckCircle2 size={15} />
+                        Sources from the knowledge base
+                      </div>
 
-    <div className="space-y-2">
-      {message.sources.map((source, index) => (
-        <div
-          key={`${source.source}-${index}`}
-          className="rounded-lg border border-white/10 bg-black/20 p-3"
-        >
-          <p className="text-sm font-medium text-emerald-300">
-            Source {index + 1}
-          </p>
+                      <div className="space-y-2">
+                        {message.sources.map((source, index) => (
+                          <div
+                            key={`${source.source}-${index}`}
+                            className="rounded-lg border border-white/10 bg-black/20 p-3"
+                          >
+                            <p className="text-sm font-medium text-emerald-300">
+                              Source {index + 1}
+                            </p>
 
-          <p className="mt-1 text-xs text-gray-400">
-            {source.source || "Knowledge base document"}
-          </p>
+                            <p className="mt-1 text-xs text-gray-400">
+                              {source.source || "Knowledge base document"}
+                            </p>
 
-          <p className="mt-2 text-xs leading-5 text-gray-300">
-            {source.text
-              ? `${source.text.slice(0, 250)}${
-                  source.text.length > 250 ? "..." : ""
-                }`
-              : "Relevant document content"}
-          </p>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+                            <p className="mt-2 text-xs leading-5 text-gray-300">
+                              {source.text
+                                ? `${source.text.slice(0, 250)}${
+                                    source.text.length > 250 ? "..." : ""
+                                  }`
+                                : "Relevant document content"}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {message.role === "user" && (
@@ -356,10 +361,10 @@ function Chat() {
             </div>
           </div>
 
-         <p className="mt-3 text-center text-xs leading-5 text-gray-600">
-  IP-SAKTI Sahayak provides document-based information for educational
-  purposes only. It does not constitute legal advice.
-</p>
+          <p className="mt-3 text-center text-xs leading-5 text-gray-600">
+            IP-SAKTI Sahayak provides document-based information for
+            educational purposes only. It does not constitute legal advice.
+          </p>
         </div>
       </main>
     </div>
