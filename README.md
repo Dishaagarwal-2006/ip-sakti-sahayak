@@ -6,6 +6,18 @@ IP-SAKTI Sahayak is an AI-powered, RAG-based assistant designed to provide acces
 
 It uses official knowledge-base documents to generate clear, structured, and source-based answers.
 
+🌐 Frontend Link
+
+👉 https://ip-sakti-sahayak-smoky.vercel.app/chat
+
+⚙️ Backend API Link
+
+👉 https://ip-sakti-sahayak-za5c.onrender.com
+
+📚 Backend API Documentation
+
+👉 https://ip-sakti-sahayak-za5c.onrender.com/docs
+
 ---
 
 ## 🚀 Features
