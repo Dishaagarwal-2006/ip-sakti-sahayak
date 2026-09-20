@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+
 from services.llm_service import generate_answer
 from services.retriever import retrieve_relevant_chunks
 
