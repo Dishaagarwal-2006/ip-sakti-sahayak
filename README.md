@@ -8,7 +8,7 @@ It uses official knowledge-base documents to generate clear, structured, and sou
 
 🌐 Frontend Link
 
-👉 https://ip-sakti-sahayak-smoky.vercel.app/chat
+👉 https://ip-sakti-sahayak-smoky.vercel.app/
 
 ⚙️ Backend API Link
 
